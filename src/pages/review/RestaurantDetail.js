@@ -68,7 +68,7 @@ const RestaurantDetail = () => {
     };
 
     try {
-      await axios.post('http://localhost:9070/bookmark', info);
+      await axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/bookmark', info);
       setIsBookmarked(nextToggle);
 
       alert(nextToggle ? '저장되었습니다.' : '저장이 해제되었습니다.');
@@ -80,7 +80,7 @@ const RestaurantDetail = () => {
   // 맛집 데이터 연결
   const rtLoadData = async () => {
     try {
-      const res = await axios.get(`http://localhost:9070/restaurant/detail/${rt_no}`);
+      const res = await axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/restaurant/detail/${rt_no}`);
 
       setRestaurantData(res.data);
     } catch (err) {
@@ -91,7 +91,7 @@ const RestaurantDetail = () => {
   // 리뷰 데이터 연결
   const rvLoadData = async () => {
     try {
-      const res = await axios.get('http://localhost:9070/review', {
+      const res = await axios.get('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/review', {
         params: { rt_no },
       });
 
@@ -133,7 +133,7 @@ const RestaurantDetail = () => {
                 restaurantData.rt_img &&
                 <SwiperSlide>
                   <div className="img-box">
-                    <img src={`http://localhost:9070/uploads/restaurant/${restaurantData.rt_img}`} alt={`${restaurantData.rt_name} 메인`} />
+                    <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/restaurant/${restaurantData.rt_img}`} alt={`${restaurantData.rt_name} 메인`} />
                   </div>
                 </SwiperSlide>
               }
@@ -141,7 +141,7 @@ const RestaurantDetail = () => {
                 restaurantData.rt_img2 &&
                 <SwiperSlide>
                   <div className="img-box">
-                    <img src={`http://localhost:9070/uploads/restaurant/${restaurantData.rt_img2}`} alt={`${restaurantData.rt_name} 메인`} />
+                    <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/restaurant/${restaurantData.rt_img2}`} alt={`${restaurantData.rt_name} 메인`} />
                   </div>
                 </SwiperSlide>
               }
@@ -149,7 +149,7 @@ const RestaurantDetail = () => {
                 restaurantData.rt_img3 &&
                 <SwiperSlide>
                   <div className="img-box">
-                    <img src={`http://localhost:9070/uploads/restaurant/${restaurantData.rt_img3}`} alt={`${restaurantData.rt_name} 메인`} />
+                    <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/restaurant/${restaurantData.rt_img3}`} alt={`${restaurantData.rt_name} 메인`} />
                   </div>
                 </SwiperSlide>
               }
@@ -157,7 +157,7 @@ const RestaurantDetail = () => {
                 restaurantData.rt_img4 &&
                 <SwiperSlide>
                   <div className="img-box">
-                    <img src={`http://localhost:9070/uploads/restaurant/${restaurantData.rt_img4}`} alt={`${restaurantData.rt_name} 메인`} />
+                    <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/restaurant/${restaurantData.rt_img4}`} alt={`${restaurantData.rt_name} 메인`} />
                   </div>
                 </SwiperSlide>
               }
@@ -165,7 +165,7 @@ const RestaurantDetail = () => {
                 restaurantData.rt_img5 &&
                 <SwiperSlide>
                   <div className="img-box">
-                    <img src={`http://localhost:9070/uploads/restaurant/${restaurantData.rt_img5}`} alt={`${restaurantData.rt_name} 메인`} />
+                    <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/restaurant/${restaurantData.rt_img5}`} alt={`${restaurantData.rt_name} 메인`} />
                   </div>
                 </SwiperSlide>
               }
@@ -226,7 +226,7 @@ const RestaurantDetail = () => {
                   <li key={item.br_no}>
                     <Link to={`/review/detail/${item.br_no}`} title={`${item.rt_name} 리뷰 상세 페이지로 이동`}>
                       <div className="img-box">
-                        <img src={`http://localhost:9070/uploads/review/${item.br_img}`} alt={`${item.rt_name} 리뷰`} />
+                        <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/review/${item.br_img}`} alt={`${item.rt_name} 리뷰`} />
                       </div>
                       <div className="txt-box">
                         <p className='text'>{item.br_desc}</p>

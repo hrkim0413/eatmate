@@ -9,7 +9,7 @@ function CommunityList(props) {
   const [data, setData] = useState([]);
 
   const loadData = () => {
-    axios.get('http://localhost:9070/communitylist')
+    axios.get('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/communitylist')
       .then(res => {
         setData(res.data);
       })
@@ -24,7 +24,7 @@ function CommunityList(props) {
     if (window.confirm(`${u_nick}님의 게시물을 삭제하시겠습니까?`)) {
       try {
         await axios
-          .delete(`http://localhost:9070/admin/community/${bc_no}`);
+          .delete(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/community/${bc_no}`);
 
         alert(`선택하신 ${u_nick}님의 게시글을 삭제했습니다.`);
         loadData();
@@ -80,7 +80,7 @@ function CommunityList(props) {
                     <td>{item.bc_desc}</td>
                     <td>{item.bc_heart}</td>
                     <td>{item.bc_comment}</td>
-                    <td>{ dateFormat2(item.bc_date)}</td>
+                    <td>{dateFormat2(item.bc_date)}</td>
                     <td className='btn-td'>
                       <Link to={`/admin/board/community/modify/${item.bc_no}`} className='btn-update btn'>수정</Link>
                       <button className='btn-delete btn' onClick={() => deleteData(item.bc_no, item.u_nick)}>삭제</button>
