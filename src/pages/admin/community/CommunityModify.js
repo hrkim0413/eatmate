@@ -17,7 +17,7 @@ function CommunityCreate(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/community/detail/${bc_no}`)
+    axios.get(`http://localhost:9070/community/detail/${bc_no}`)
       .then(res => {
         // console.log('서버 응답 값 : ', res.data);
         setBcInput(res.data);
@@ -37,7 +37,7 @@ function CommunityCreate(props) {
     e.preventDefault();
 
     try {
-      await axios.put(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/community/update/${bc_no}`, {
+      await axios.put(`http://localhost:9070/community/update/${bc_no}`, {
         bc_title: bcInput.bc_title,
         bc_desc: bcInput.bc_desc,
       })
@@ -53,24 +53,24 @@ function CommunityCreate(props) {
   return (
     <>
       <section className='admin-create admin-usercreate'>
-        <article className="pc-inner">
+        <h2 className="hidden">자유게시판 수정</h2>
+        <div className="pc-inner">
           {/* 좌측 내비 */}
           <Aside navName="board" />
 
           {/* 우측 리스트 */}
-          <div className='right-content'>
+          <article className='right-content'>
             <TitleBox title="자유게시판 수정" />
 
             <form onSubmit={handleSubmit}>
-              <legend>게시글 수정</legend>
-              <PcInput type="input" name='bc_title' title='제목' value={bcInput.bc_title} onChange={handleChange} />
-              <PcInput type="input" name="bc_desc" title="내용" value={bcInput.bc_desc} onChange={handleChange} />
+              <PcInput type="text" name='bc_title' title='제목' value={bcInput.bc_title} onChange={handleChange} />
+              <PcInput type="text" name="bc_desc" title="내용" value={bcInput.bc_desc} onChange={handleChange} />
 
               <button type="submit">수정 완료</button>
             </form>
 
-          </div>
-        </article>
+          </article>
+        </div>
       </section>
     </>
   );

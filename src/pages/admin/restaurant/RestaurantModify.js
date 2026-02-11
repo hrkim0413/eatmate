@@ -26,7 +26,7 @@ function RestaurantModify(props) {
 
   // 페이지에 들어왔을 때 기존 유저값이 나오게
   useEffect(() => {
-    axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant/${rt_no}`)
+    axios.get(`http://localhost:9070/admin/restaurant/${rt_no}`)
       .then(res => {
         setRtInput(prev => ({
           ...prev,
@@ -69,7 +69,7 @@ function RestaurantModify(props) {
     if (picFile) formData.append('rt_img', picFile); // key 이름 중요(백엔드와 동일)
 
     try {
-      await axios.put('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant', formData);
+      await axios.put('http://localhost:9070/admin/restaurant', formData);
 
       alert('맛집 수정이 완료되었습니다. 맛집 목록 페이지로 이동합니다.');
       navigate('/admin/restaurant');
@@ -81,17 +81,16 @@ function RestaurantModify(props) {
   return (
     <>
       <section className='admin-create admin-restaurant-create'>
-        <article className="pc-inner">
+        <h2 className='hidden'>맛집 수정</h2>
+        <div className="pc-inner">
           {/* 좌측 내비 */}
           <Aside navName="restaurant" />
 
           {/* 우측 리스트 */}
-          <div className='right-content'>
+          <article className='right-content'>
             <TitleBox title="맛집 수정" />
 
             <form onSubmit={handleSubmit}>
-              <legend>맛집 수정하기</legend>
-
               <div className="pc-input-box">
                 <label htmlFor="rt_cate">맛집 카테고리</label>
                 <select name="rt_cate" id="rt_cate" value={rtInput.rt_cate} onChange={handleChange} required>
@@ -107,9 +106,9 @@ function RestaurantModify(props) {
                 </select>
               </div>
 
-              <PcInput type="input" name="rt_name" title="맛집명" value={rtInput.rt_name} onChange={handleChange} />
+              <PcInput type="text" name="rt_name" title="맛집명" value={rtInput.rt_name} onChange={handleChange} />
 
-              <PcInput type="input" name="rt_desc" title="맛집 설명" value={rtInput.rt_desc} onChange={handleChange} />
+              <PcInput type="text" name="rt_desc" title="맛집 설명" value={rtInput.rt_desc} onChange={handleChange} />
 
               <PcInputFile
                 name="rt_img"
@@ -126,8 +125,8 @@ function RestaurantModify(props) {
 
               <button type="submit">등록 완료</button>
             </form>
-          </div>
-        </article>
+          </article>
+        </div>
       </section>
     </>
   );

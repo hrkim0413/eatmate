@@ -4,6 +4,7 @@ import axios from 'axios';
 import Aside from 'components/admin/Aside';
 import TitleBox from 'components/admin/TitleBox';
 import { Link } from 'react-router-dom';
+import { dateFormat2 } from 'utils/dateFormat2';
 
 
 
@@ -12,7 +13,7 @@ function UserList(props) {
   const [data, setData] = useState([]);
 
   const loadData = () => {
-    axios.get('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/user')
+    axios.get('http://localhost:9070/admin/user')
       .then(res => {
         setData(res.data);
       })
@@ -26,7 +27,7 @@ function UserList(props) {
   const delData = (u_no) => {
     if (window.confirm('삭제하시겠습니까?')) {
       axios
-        .delete(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/user/${u_no}`)
+        .delete(`http://localhost:9070/admin/user/${u_no}`)
         .then(() => {
           alert('삭제되었습니다.')
           loadData();
@@ -37,12 +38,13 @@ function UserList(props) {
   return (
     <>
       <section className='admin-list admin-userlist'>
-        <article className="pc-inner">
+        <h2 className="hidden">회원 목록</h2>
+        <div className="pc-inner">
           {/* 좌측 내비 */}
           <Aside navName="user" />
 
           {/* 우측 리스트 */}
-          <div className='admin-list'>
+          <article className='admin-list'>
             <TitleBox title="회원 목록" />
 
             <table>
@@ -76,7 +78,7 @@ function UserList(props) {
                     <td>{item.u_nick}</td>
                     <td>{item.u_desc}</td>
                     <td>{item.u_badge}</td>
-                    <td>{item.u_date}</td>
+                    <td>{dateFormat2(item.u_date)}</td>
                     <td className='btn-td'>
                       <Link to={`/admin/user/modify/${item.u_no}`} className='btn-update btn'>수정</Link>
                       <button className='btn-delete btn' onClick={() => delData(item.u_no)}>삭제</button>
@@ -86,8 +88,8 @@ function UserList(props) {
                 }
               </tbody>
             </table>
-          </div>
-        </article>
+          </article>
+        </div>
       </section>
     </>
   );

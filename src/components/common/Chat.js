@@ -19,7 +19,7 @@ function Chat({ p_board_cate, p_board_no }) {
 
   const loadData = async () => {
     try {
-      const res = await axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/common/chat', boardInfo);
+      const res = await axios.post('http://localhost:9070/common/chat', boardInfo);
 
       setChatDate(res.data);
     } catch (err) {
@@ -32,7 +32,7 @@ function Chat({ p_board_cate, p_board_no }) {
   }, [p_board_cate, p_board_no])
 
   return (
-    <article className='common-chat'>
+    <div className='common-chat'>
       <InputComment p_board_cate={p_board_cate} p_board_no={p_board_no} />
       <ul className='comm-comment'>
         {
@@ -47,7 +47,7 @@ function Chat({ p_board_cate, p_board_no }) {
           ))
         }
       </ul>
-    </article>
+    </div>
   );
 }
 

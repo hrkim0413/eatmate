@@ -3,13 +3,14 @@ import Aside from 'components/admin/Aside';
 import TitleBox from 'components/admin/TitleBox';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { dateFormat2 } from 'utils/dateFormat2';
 
 function ReviewList(props) {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
     try {
-      const res = await axios.get('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/review/all');
+      const res = await axios.get('http://localhost:9070/review/all');
       setData(res.data);
     } catch (err) {
       console.log(err.response.data.error);
@@ -24,7 +25,7 @@ function ReviewList(props) {
     if (window.confirm(`${u_nick}님의 리뷰를 삭제하시겠습니까?`)) {
       try {
         await axios
-          .delete(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/review/${br_no}`);
+          .delete(`http://localhost:9070/admin/review/${br_no}`);
 
         alert(`선택하신 ${u_nick}님의 리뷰를 삭제했습니다.`);
         loadData();
@@ -37,12 +38,13 @@ function ReviewList(props) {
   return (
     <>
       <section className='admin-list admin-userlist'>
-        <article className="pc-inner">
+        <h2 className='hidden'>맛집 리뷰 목록</h2>
+        <div className="pc-inner">
           {/* 좌측 내비 */}
           <Aside navName="board" />
 
           {/* 우측 리스트 */}
-          <div className='admin-list'>
+          <article className='admin-list'>
             <TitleBox title="맛집 리뷰 목록" />
 
             <table>
@@ -80,12 +82,12 @@ function ReviewList(props) {
                       <td>{item.br_no}</td>
                       <td>{item.u_nick}</td>
                       <td>{item.br_desc}</td>
-                      <td className='imgtd'><img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/review/${item.br_img}`} alt="식당 사진"></img></td>
+                      <td className='imgtd'><img src={`http://localhost:9070/uploads/review/${item.br_img}`} alt="식당 사진"></img></td>
                       <td>{item.rt_name}</td>
                       <td>{item.br_rank}</td>
                       <td>{item.br_heart}</td>
                       <td>{item.br_comment}</td>
-                      <td>{item.br_date}</td>
+                      <td>{ dateFormat2(item.br_date)}</td>
                       <td className='btn-td'>
                         <Link to={`/admin/board/review/modify/${item.br_no}`} className='btn-update btn'>수정</Link>
                         <button className='btn-delete btn' onClick={() => deleteData(item.br_no, item.u_no)}>삭제</button>
@@ -95,8 +97,8 @@ function ReviewList(props) {
                 }
               </tbody>
             </table>
-          </div>
-        </article>
+          </article>
+        </div>
       </section>
     </>
   );

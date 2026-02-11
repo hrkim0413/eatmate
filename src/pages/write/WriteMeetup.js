@@ -15,6 +15,7 @@ const WriteMeetup = () => {
 
   const token = localStorage.getItem('token');
   const decoded = token ? jwtDecode(token) : '';
+  const today = new Date().toISOString().split('T')[0];
 
   const [form, setForm] = useState({
     bm_board_cate: '',
@@ -62,7 +63,7 @@ const WriteMeetup = () => {
 
     if (imgFile) formData.append('bm_img', imgFile); // key 이름 중요(백엔드와 동일)
 
-    axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/meetup', formData)
+    axios.post('http://localhost:9070/meetup', formData)
       .then(() => {
         alert('게시글이 등록되었습니다.');
         navigate('/meetup');
@@ -92,7 +93,7 @@ const WriteMeetup = () => {
 
           <InputTextarea name={'bm_desc'} title={'내용'} onChange={handleChange} value={form.bm_desc} />
 
-          <Input type={'date'} name={'bm_m_date'} title={'날짜'} onChange={handleChange} value={form.bm_m_date} />
+          <Input type={'date'} name={'bm_m_date'} title={'날짜'} onChange={handleChange} value={form.bm_m_date} min={today} />
 
           <Input type={'number'} name={'bm_m_people_all'} title={'참석인원'} onChange={handleChange} value={form.bm_m_people_all} />
 
