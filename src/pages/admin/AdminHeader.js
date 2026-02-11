@@ -63,7 +63,7 @@ function AdminHeader() {
 
         {adminToken && adminInfo && (
           <div className='admin-info'>
-            <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/admin-user/${adminInfo.token_profile}`} alt='' />
+            <img src={`http://localhost:9070/uploads/admin-user/${adminInfo.token_profile}`} alt='' />
             <p
               onClick={() => setHandleLogout(prev => !prev)}
               className={handleLogout ? 'up' : 'down'}

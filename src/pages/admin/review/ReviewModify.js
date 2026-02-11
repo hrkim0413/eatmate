@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { useAdminRequireLogin } from 'utils/useAdminRequireLogin';
 
 import Aside from 'components/admin/Aside';
 import TitleBox from 'components/admin/TitleBox';
@@ -9,6 +11,15 @@ import PcInputFile from 'components/admin/PcInputFile';
 import PcInputTextarea from 'components/admin/PcInputTextarea';
 
 function ReviewCreate(props) {
+  useAdminRequireLogin(); // 페이지에 진입했을 때 로그인이 안되어 있다면 로그인 페이지로 이동
+  const token = localStorage.getItem('adminToken');
+  //토큰만료 확인후 삭제
+  if (token) {
+    const { exp } = jwtDecode(token);
+    if (Date.now() >= exp * 1000) {
+      localStorage.removeItem('adminToken');
+    }
+  }
   const [reviewData, setReviewData] = useState({
     rt_no: '',
     rt_name: '',
@@ -22,7 +33,7 @@ function ReviewCreate(props) {
 
   // 페이지에 들어왔을 때 기존값이 나오게
   useEffect(() => {
-    axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/review/${br_no}`)
+    axios.get(`http://localhost:9070/admin/review/${br_no}`)
       .then(res => {
         setReviewData(prev => ({
           ...prev,
@@ -41,7 +52,7 @@ function ReviewCreate(props) {
 
     if (name === 'rt_no') {
       const rt_no = value;
-      axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant/${rt_no}`)
+      axios.get(`http://localhost:9070/admin/restaurant/${rt_no}`)
         .then(res => {
           setReviewData(prev => ({
             ...prev,
@@ -74,7 +85,7 @@ function ReviewCreate(props) {
     if (picFile) formData.append('br_img', picFile); // key 이름 중요(백엔드와 동일)
 
     try {
-      await axios.put('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/review', formData);
+      await axios.put('http://localhost:9070/admin/review', formData);
 
       alert('맛집 리뷰 정보가 수정되었습니다. 맛집 리뷰 목록 페이지로 이동합니다.');
       navigate('/admin/board/review');

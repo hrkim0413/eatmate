@@ -8,8 +8,20 @@ import Aside from 'components/admin/Aside';
 import TitleBox from 'components/admin/TitleBox';
 import PcInput from 'components/admin/PcInput';
 import PcInputFile from 'components/admin/PcInputFile';
+import { jwtDecode } from 'jwt-decode';
+import { useAdminRequireLogin } from 'utils/useAdminRequireLogin';
 
 function RestaurantCreate(props) {
+  useAdminRequireLogin(); // 페이지에 진입했을 때 로그인이 안되어 있다면 로그인 페이지로 이동
+  const token = localStorage.getItem('adminToken');
+  //토큰만료 확인후 삭제
+  if (token) {
+    const { exp } = jwtDecode(token);
+    if (Date.now() >= exp * 1000) {
+      localStorage.removeItem('adminToken');
+    }
+  }
+
   const [rtInput, setRtInput] = useState({
     rt_name: '',
     rt_desc: '',
@@ -46,7 +58,7 @@ function RestaurantCreate(props) {
     if (picFile) formData.append('rt_img', picFile); // key 이름 중요(백엔드와 동일)
 
     try {
-      await axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant', formData);
+      await axios.post('http://localhost:9070/admin/restaurant', formData);
 
       alert('맛집 등록이 완료되었습니다. 맛집 목록 페이지로 이동합니다.');
       navigate('/admin/restaurant');

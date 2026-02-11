@@ -2,6 +2,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { jwtDecode } from 'jwt-decode';
+import { useAdminRequireLogin } from 'utils/useAdminRequireLogin';
+
 import './RestaurantCreate.scss';
 
 import Aside from 'components/admin/Aside';
@@ -10,6 +13,15 @@ import PcInput from 'components/admin/PcInput';
 import PcInputFile from 'components/admin/PcInputFile';
 
 function RestaurantModify(props) {
+  useAdminRequireLogin(); // 페이지에 진입했을 때 로그인이 안되어 있다면 로그인 페이지로 이동
+  const token = localStorage.getItem('adminToken');
+  //토큰만료 확인후 삭제
+  if (token) {
+    const { exp } = jwtDecode(token);
+    if (Date.now() >= exp * 1000) {
+      localStorage.removeItem('adminToken');
+    }
+  }
   const [rtInput, setRtInput] = useState({
     rt_no: '',
     rt_name: '',
@@ -26,7 +38,7 @@ function RestaurantModify(props) {
 
   // 페이지에 들어왔을 때 기존 유저값이 나오게
   useEffect(() => {
-    axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant/${rt_no}`)
+    axios.get(`http://localhost:9070/admin/restaurant/${rt_no}`)
       .then(res => {
         setRtInput(prev => ({
           ...prev,
@@ -69,7 +81,7 @@ function RestaurantModify(props) {
     if (picFile) formData.append('rt_img', picFile); // key 이름 중요(백엔드와 동일)
 
     try {
-      await axios.put('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant', formData);
+      await axios.put('http://localhost:9070/admin/restaurant', formData);
 
       alert('맛집 수정이 완료되었습니다. 맛집 목록 페이지로 이동합니다.');
       navigate('/admin/restaurant');

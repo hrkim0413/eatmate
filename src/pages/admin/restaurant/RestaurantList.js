@@ -4,12 +4,23 @@ import TitleBox from 'components/admin/TitleBox';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dateFormat2 } from 'utils/dateFormat2';
+import { jwtDecode } from 'jwt-decode';
+import { useAdminRequireLogin } from 'utils/useAdminRequireLogin';
 
 function RestaurantList(props) {
+  useAdminRequireLogin(); // 페이지에 진입했을 때 로그인이 안되어 있다면 로그인 페이지로 이동
+  const token = localStorage.getItem('adminToken');
+  //토큰만료 확인후 삭제
+  if (token) {
+    const { exp } = jwtDecode(token);
+    if (Date.now() >= exp * 1000) {
+      localStorage.removeItem('adminToken');
+    }
+  }
   const [data, setData] = useState([]);
   const loadData = async () => {
     try {
-      const res = await axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/restaurant');
+      const res = await axios.post('http://localhost:9070/restaurant');
 
       setData(res.data);
     } catch (err) {
@@ -26,7 +37,7 @@ function RestaurantList(props) {
     if (window.confirm(`${rt_name}을(를) 삭제하시겠습니까?`)) {
       try {
         await axios
-          .delete(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/admin/restaurant/${rt_no}`);
+          .delete(`http://localhost:9070/admin/restaurant/${rt_no}`);
 
         alert(`선택하신 ${rt_name}을(를) 삭제했습니다.`);
         loadData();
@@ -83,7 +94,7 @@ function RestaurantList(props) {
                     <td>{item.rt_cate}</td>
                     <td>{item.rt_name}</td>
                     <td>{item.rt_desc}</td>
-                    <td className='imgtd'><img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/restaurant/${item.rt_img}`} alt="식당 사진" /></td>
+                    <td className='imgtd'><img src={`http://localhost:9070/uploads/restaurant/${item.rt_img}`} alt="식당 사진" /></td>
                     <td>{item.rt_tel}</td>
                     <td>{item.rt_location}</td>
                     <td>{item.rt_rank} / ({item.rt_review})</td>

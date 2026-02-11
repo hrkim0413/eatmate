@@ -10,9 +10,21 @@ import InputTextarea from 'components/common/InputTextarea';
 import ButtonWide from 'components/common/ButtonWide';
 import InputFile from 'components/common/InputFile';
 import { useRequireLogin } from 'utils/useRequireLogin';
+import { jwtDecode } from 'jwt-decode';
 
 const MypageProfile = () => {
   useRequireLogin(); // 페이지에 진입했을 때 로그인이 안되어 있다면 로그인 페이지로 이동
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  //토큰만료 확인후 삭제
+  if (token) {
+    const { exp } = jwtDecode(token);
+    if (Date.now() >= exp * 1000) {
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
+  }
 
   const [myProfileInput, setMyProfileInput] = useState({
     u_id: '',
@@ -29,7 +41,7 @@ const MypageProfile = () => {
   const [checkedNick, setCheckedNick] = useState('');
   const [originalNick, setOriginalNick] = useState('');
   const { user_no } = useParams()
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     // 페이지에 들어왔을 때 로그인 토큰이 있다면 메인 페이지로 강제 이동
@@ -40,7 +52,7 @@ const MypageProfile = () => {
     }
 
     // 페이지에 들어왔을 때 기존 유저값이 나오게
-    axios.get(`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/mypage/${user_no}`)
+    axios.get(`http://localhost:9070/mypage/${user_no}`)
       .then(res => {
         setMyProfileInput(prev => ({
           ...prev,
@@ -92,7 +104,7 @@ const MypageProfile = () => {
   // 닉네임 중복 확인 버튼
   const nickCheck = async () => {
     try {
-      const res = await axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/nickcheck', {
+      const res = await axios.post('http://localhost:9070/nickcheck', {
         u_nick: myProfileInput.u_nick
       });
 
@@ -134,7 +146,10 @@ const MypageProfile = () => {
     if (profileFile) formData.append('u_pic', profileFile); // key 이름 중요(백엔드와 동일)
 
     try {
-      await axios.put('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/mypage/profile/modify/', formData);
+      await axios.put('http://localhost:9070/mypage/profile/modify/', formData);
+
+      // 프로필 수정 후 Header 즉시 갱신
+      window.dispatchEvent(new Event('authchange'));
 
       alert('프로필 수정이 완료되었습니다. 마이페이지로 이동합니다.');
       navigate('/mypage');

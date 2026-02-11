@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+// import api from '../../utils/api';
 
 import TitleCenter from 'components/common/TitleCenter';
 import Input from 'components/common/Input';
@@ -13,7 +14,17 @@ import { useRequireLogin } from 'utils/useRequireLogin';
 const WriteMeetup = () => {
   useRequireLogin(); // 페이지에 진입했을 때 로그인이 안되어 있다면 로그인 페이지로 이동
 
+  const navigate = useNavigate();
+
   const token = localStorage.getItem('token');
+  //토큰만료확인후 삭제
+  if (token) {
+    const { exp } = jwtDecode(token);
+    if (Date.now() >= exp * 1000) {
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
+  }
   const decoded = token ? jwtDecode(token) : '';
   const today = new Date().toISOString().split('T')[0];
 
@@ -31,7 +42,7 @@ const WriteMeetup = () => {
     bm_date: ''
   });
   const [imgFile, setImgFile] = useState(null);
-  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     setForm({
@@ -63,7 +74,7 @@ const WriteMeetup = () => {
 
     if (imgFile) formData.append('bm_img', imgFile); // key 이름 중요(백엔드와 동일)
 
-    axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/meetup', formData)
+    axios.post('http://localhost:9070/meetup', formData)
       .then(() => {
         alert('게시글이 등록되었습니다.');
         navigate('/meetup');
