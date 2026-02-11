@@ -7,7 +7,7 @@ function Comment({ profil, nick, txt, time, isMine, onDelete }) {
     <>
       <li>
         <div className="comment-img">
-          <img src={`http://localhost:9070/uploads/user/${profil}`} alt={`${nick} 프로필`} />
+          <img src={`https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/uploads/user/${profil}`} alt={`${nick} 프로필`} />
         </div>
 
         <div className="comment-content">

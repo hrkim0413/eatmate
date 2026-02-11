@@ -45,7 +45,7 @@ const WriteCommunity = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:9070/writecommunity', form)
+    axios.post('https://port-0-eatmate-backend-mlem81pp426165a9.sel3.cloudtype.app/writecommunity', form)
       .then(() => {
         alert('게시글이 등록되었습니다.');
         navigate('/community');
